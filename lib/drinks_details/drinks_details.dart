@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../model.dart';
 import '../shared/qty_widget.dart';
 import '../shared/toggle_widget.dart';
@@ -7,9 +8,7 @@ import '../shared/toggle_widget.dart';
 class DrinkDetails extends StatefulWidget {
   final int initialIndex;
 
-  const DrinkDetails({super.key,
-    this.initialIndex = 0,
-  });
+  const DrinkDetails({super.key, this.initialIndex = 0});
 
   @override
   State<DrinkDetails> createState() => _DrinkDetailsState();
@@ -17,8 +16,10 @@ class DrinkDetails extends StatefulWidget {
 
 class _DrinkDetailsState extends State<DrinkDetails> {
   final List<String> sizes = ["Small", "Large"];
-  late PageController _controller ;
+  late PageController _controller;
+
   late double _currentPage = 0;
+  bool isFavorite = false;
   double drinkSize = 1.1;
 
   @override
@@ -51,9 +52,17 @@ class _DrinkDetailsState extends State<DrinkDetails> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       body: Stack(
         children: [
+          ///Background
+          Positioned.fill(
+            child: Image.asset(
+              "assets/background/background.jpg",
+              fit: BoxFit.cover,
+            ),
+          ),
+
           ///1 Widget
           Positioned.fill(
             child: PageView.builder(
@@ -82,7 +91,7 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                             ),
                             Image.asset(
                               drinks[index].image,
-                              height: 380,
+                              height: 350,
                               fit: BoxFit.contain,
                             ),
                           ],
@@ -108,28 +117,44 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                   children: [
                     Text(
                       drinks[_currentPage.round()].name,
-                      style: TextStyle(
-                        fontSize: 24,
+                      style: GoogleFonts.playfairDisplay(
+                        fontSize: 36,
                         fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                        color: const Color(0xFF321E17),
                       ),
                     ),
+                    const SizedBox(height: 10),
                     Text(
                       drinks[_currentPage.round()].title,
-                      style: TextStyle(
+                      style: GoogleFonts.inter(
                         fontSize: 20,
                         fontWeight: FontWeight.normal,
+                        color: const Color(0xFF703820),
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "£ ${drinks[_currentPage.round()].price}",
+                      style: GoogleFonts.poppins(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
                   ],
                 ),
-                Text(
-                  "£ ${drinks[_currentPage.round()].price}",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isFavorite = !isFavorite;
+                    });
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? const Color(0xFFC68B59) : const Color(0xFF703820),
+                    ),
                   ),
                 ),
               ],
@@ -138,7 +163,7 @@ class _DrinkDetailsState extends State<DrinkDetails> {
 
           /// Multi Selection
           Positioned(
-            bottom: 90,
+            bottom: 110,
             left: 0,
             right: 0,
             child: Padding(
@@ -159,7 +184,7 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                             child: Column(
                               children: [
                                 Container(
-                                  padding: EdgeInsets.all(8),
+                                  padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
                                     color: _selectindex == index
                                         ? Colors.redAccent
@@ -170,12 +195,15 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                                   child: SvgPicture.asset(
                                     "assets/logo/Vector.svg",
                                     height: 30,
-                                    color: _selectindex == index
-                                        ? Colors.white
-                                        : Colors.black45,
+                                    colorFilter: ColorFilter.mode(
+                                      _selectindex == index
+                                          ? Colors.white
+                                          : Colors.black45,
+                                      BlendMode.srcIn,
+                                    ),
                                   ),
                                 ),
-                                SizedBox(width: 120),
+                                const SizedBox(width: 120),
                                 Text(
                                   sizes[index],
                                   style: TextStyle(
@@ -191,7 +219,7 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                           );
                         }),
                       ),
-                      Spacer(),
+                      const Spacer(),
                       GestureDetector(
                         onTap: () {},
                         child: Container(
@@ -201,8 +229,8 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                             color: Colors.grey[300],
                             borderRadius: BorderRadius.circular(30),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
                               horizontal: 8.0,
                             ),
                             child: Row(
@@ -226,8 +254,8 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 30),
-                  Row(
+                  const SizedBox(height: 30),
+                  const Row(
                     children: [
                       ToggleWidget(),
                       SizedBox(width: 10),
@@ -235,6 +263,57 @@ class _DrinkDetailsState extends State<DrinkDetails> {
                     ],
                   ),
                 ],
+              ),
+            ),
+          ),
+
+          /// Order Button Positioned
+          Positioned(
+            bottom: 30,
+            left: 20,
+            right: 20,
+            child: GestureDetector(
+              onTap: () {
+                // الأكشن عند الضغط
+              },
+              child: Container(
+                height: 60,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color:  Color(0xFF703820),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Row(
+                  children: [
+                     Expanded(
+                      child: Center(
+                        child: Text(
+                          'Add to Order',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        '£ ${drinks[_currentPage.round()].price}',
+                        style:  TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

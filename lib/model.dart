@@ -35,14 +35,14 @@ class DrinkModel {
 
     DrinkModel(
       image: "assets/drinks/Peanut Butter.png",
-      name: "Peanut Butter",
+      name: "Peanut\n Butter",
       title: "5 Flavors of Your Drink",
       price: "59",
     ),
 
     DrinkModel(
       image: "assets/drinks/Salted Caramel.png",
-      name: "Salted Caramel",
+      name: "Salted\n Caramel",
       title: "30 Flavors of Your Drink",
       price: "98",
     ),

@@ -14,25 +14,25 @@ class _ToggleWidgetState extends State<ToggleWidget> {
     return Container(
       padding: EdgeInsets.all(4),
       decoration: BoxDecoration(
-        borderRadius: BorderRadiusGeometry.circular(100),
-        color: Colors.grey[300],
+        borderRadius: BorderRadius.circular(100),
+        color: Color(0xFFF3EAE1),
       ),
       child: Row(
         children: [
-          _buildToggleSelection("Hot", !isIced),
-          _buildToggleSelection("Iced", isIced),
+          _buildToggleSelection("Hot", !isIced,(Icons.hot_tub_rounded)),
+          _buildToggleSelection("Iced", isIced, (Icons.severe_cold_outlined)),
 
         ],
       ),
     );
   }
 
-  Widget _buildTextCUP(label)
+  Widget _buildTextCUP(label,icon)
   {
     return Text(label);
   }
 
-  Widget _buildToggleSelection(label, bool selected)
+  Widget _buildToggleSelection(label, bool selected,icon)
   {
     return GestureDetector(
       onTap: ()
@@ -47,12 +47,18 @@ class _ToggleWidgetState extends State<ToggleWidget> {
           alignment: Alignment.bottomCenter,
           duration: Duration(milliseconds: 500),
         decoration: BoxDecoration(
-          color: selected ? Colors.white: Colors.grey[300],
+          color: selected ? Colors.white: Colors.transparent,
           borderRadius: BorderRadius.circular(100),
         ),
         child: Padding(
           padding: const EdgeInsets.all(10.0),
-          child: Text(label),
+          child: Row(
+            children: [
+              Icon(icon),
+              SizedBox(width: 5,),
+              Text(label),
+            ],
+          ),
         ),
       ),
     );
